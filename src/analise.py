@@ -3,6 +3,9 @@ import pandas as pd
 # Carrega os dados
 df = pd.read_csv("data/dados.csv")
 
+# Converte a coluna de data
+df["Data"] = pd.to_datetime(df["Data"])
+
 # Calcula o faturamento de cada venda
 df["Faturamento"] = df["Quantidade"] * df["Preço"]
 
@@ -46,6 +49,17 @@ faturamento_por_categoria = (
     .sort_values(ascending=False)
 )
 
+# ==============================
+# FATURAMENTO POR MÊS
+# ==============================
+
+df["Mes"] = df["Data"].dt.to_period("M")
+
+faturamento_por_mes = (
+    df.groupby("Mes")["Faturamento"]
+    .sum()
+)
+
 print("=== ANÁLISE DE VENDAS ===")
 print(f"Faturamento total: R$ {faturamento_total:,.2f}")
 print(f"Quantidade total vendida: {quantidade_total}")
@@ -58,3 +72,6 @@ print(faturamento_por_produto)
 
 print("\nFaturamento por categoria:")
 print(faturamento_por_categoria)
+
+print("\nFaturamento por mês:")
+print(faturamento_por_mes)
