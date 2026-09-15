@@ -60,18 +60,31 @@ faturamento_por_mes = (
     .sum()
 )
 
+# ==============================
+# DESEMPENHO DOS PRODUTOS
+# ==============================
+
+desempenho_produtos = (
+    df.groupby("Produto")
+    .agg(
+        Quantidade_Vendida=("Quantidade", "sum"),
+        Faturamento=("Faturamento", "sum"),
+        Preco_Medio=("Preço", "mean")
+    )
+    .sort_values("Faturamento", ascending=False)
+)
+
 print("=== ANÁLISE DE VENDAS ===")
 print(f"Faturamento total: R$ {faturamento_total:,.2f}")
 print(f"Quantidade total vendida: {quantidade_total}")
 print(f"Ticket médio: R$ {ticket_medio:,.2f}")
 print(f"Produto mais vendido: {produto_mais_vendido}")
 print(f"Categoria com maior faturamento: {categoria_maior_faturamento}")
-
 print("\nFaturamento por produto:")
 print(faturamento_por_produto)
-
 print("\nFaturamento por categoria:")
 print(faturamento_por_categoria)
-
 print("\nFaturamento por mês:")
 print(faturamento_por_mes)
+print("\nDesempenho dos produtos:")
+print(desempenho_produtos)
